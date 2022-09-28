@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.lang.String;
 import java.util.Random;
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class Forca {
     private ArrayList<String> palavras = new ArrayList<>(); // lista de palavras lidas do arquivo
@@ -10,6 +13,23 @@ public class Forca {
     private int acertos; // contador de acertos
     private int penalidade;
     private final ArrayList<String> letrasJogadas = new ArrayList<>();
+
+    public Forca(String nomearquivo) throws Exception {
+        try {
+          Scanner arquivo = new Scanner(new File(nomearquivo));
+          String linha;
+          String[] partes;
+          while(arquivo.hasNextLine()) {
+            linha = arquivo.nextLine();
+            partes = linha.split(";");
+            palavras.add(partes[0]);
+            dicas.add(partes[1]);
+          }
+        }
+        catch (FileNotFoundException e) {
+          throw new Exception("Arquivo Inexistente");
+        }
+      }
 
     public void iniciar () {
         Random random = new Random();
