@@ -40,6 +40,7 @@ public class IntefaceGrafica {
 	private JPanel panelEntrada;
 	
 	private String[] letrasAdvinhadas;
+	private String tentativas ="";
 
 	/**
 	 * Launch the application.
@@ -63,6 +64,7 @@ public class IntefaceGrafica {
 	 */
 	public IntefaceGrafica() throws ParseException {
 		initialize();
+		entradaLetra.setFocusLostBehavior(JFormattedTextField.PERSIST);
 	}
 
 
@@ -122,7 +124,8 @@ public class IntefaceGrafica {
 					buttonSair.setEnabled(true);
 					buttonNovoJogo.setEnabled(false);
 					
-					labelTentativas.setText("");
+					tentativas = "";
+					labelTentativas.setText(tentativas);
 					
 					ImageIcon icone = new ImageIcon(IntefaceGrafica.class.getResource("/imagens/6.png"));
 					imagemForca.setIcon(icone);
@@ -157,11 +160,13 @@ public class IntefaceGrafica {
 					entradaLetra.setEditable(false);
 					buttonAdvinhar.setEnabled(false);
 					buttonNovoJogo.setEnabled(true);
-
+					
+					tentativas = "";
 					labelDica.setText("");
 					labelPalavra.setText("");
-					labelTentativas.setText("");
+					labelTentativas.setText(tentativas);
 					entradaLetra.setText("");
+					
 					
 					ImageIcon icone = new ImageIcon(IntefaceGrafica.class.getResource("/imagens/6.png"));
 					imagemForca.setIcon(icone);
@@ -186,7 +191,7 @@ public class IntefaceGrafica {
 		entradaLetra.setHorizontalAlignment(SwingConstants.CENTER);
 		entradaLetra.setBounds(6, 16, 87, 51);
 		panelEntrada.add(entradaLetra);
-		entradaLetra.setColumns(10);
+		entradaLetra.setColumns(1);
 		entradaLetra.setEditable(false);
 		
 		buttonAdvinhar = new JButton("Advinhar");
@@ -198,16 +203,12 @@ public class IntefaceGrafica {
 		buttonAdvinhar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String letra;
-					String saida ="";
+					String letra = "";
 					letra = entradaLetra.getText();
-					ArrayList<Integer> posicoes = jogo.getPosicoes(letra);
+					tentativas += letra + " - ";
+					labelTentativas.setText(tentativas);
 					
-					ArrayList<String> letrasJogadas = jogo.getLetrasJogadas();
-					for (int i=0;i<letrasJogadas.size();i++) {
-						saida += letrasJogadas.get(i)+" - ";
-					}
-					labelTentativas.setText(saida);
+					ArrayList<Integer> posicoes = jogo.getPosicoes(letra);
 					
 					if (posicoes.size()>0) {
 						for(int i : posicoes)
@@ -225,19 +226,19 @@ public class IntefaceGrafica {
 						ImageIcon icone = new ImageIcon(IntefaceGrafica.class.getResource(caminhoImg));
 						imagemForca.setIcon(icone);
 					}
-					if(jogo.terminou()) {
-						entradaLetra.setEditable(false);
-						buttonAdvinhar.setEnabled(false);
-						buttonNovoJogo.setEnabled(true);
-						buttonSair.setEnabled(false);
-						JOptionPane.showMessageDialog(null,"Fim de Jogo\n"+jogo.getResultado());
-					}
-					
-					entradaLetra.setText("");
-					
 				}catch(Exception e1) {
 					JOptionPane.showMessageDialog(null,e1.getMessage());
+					String caminhoImg = "/imagens/"+(6-jogo.getPenalidade())+".png";
+					ImageIcon icone = new ImageIcon(IntefaceGrafica.class.getResource(caminhoImg));
+					imagemForca.setIcon(icone);
+			}if(jogo.terminou()) {
+				entradaLetra.setEditable(false);
+				buttonAdvinhar.setEnabled(false);
+				buttonNovoJogo.setEnabled(true);
+				buttonSair.setEnabled(false);
+				JOptionPane.showMessageDialog(null,"Fim de Jogo\n"+jogo.getResultado());
 			}
+			entradaLetra.setText("");
 		}});
 		
 		/*--------------------------------------------------------------*/

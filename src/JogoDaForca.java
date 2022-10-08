@@ -40,6 +40,7 @@ public class JogoDaForca {
         letras = palavras.get(temp).split("");
         dica = dicas.get(temp);
     }
+    
     public int getTamanho() {
       return letras.length;
     }
@@ -51,13 +52,6 @@ public class JogoDaForca {
       return penalidade;
     }
     
-    public String[] getLetras() {
-    	return letras;
-    }
-    
-    public ArrayList<String> getLetrasJogadas() {
-    	return letrasJogadas;
-    }
 
     public boolean terminou() {
       if (getAcertos() == getTamanho() || getPenalidade() == 6)
@@ -83,6 +77,7 @@ public class JogoDaForca {
     public ArrayList<Integer> getPosicoes(String letra) throws Exception {
         ArrayList<Integer> temp = new ArrayList<>();
         if (letrasJogadas.contains(letra)) {
+        	penalidade += 1;
             throw new Exception("Letra já jogada");
         }
         else if (letra.length() < 2 && letra.length() > 0  && Character.isLetter(letra.charAt(0))) {
